@@ -12,7 +12,6 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 import java.io.FileInputStream;
 import java.util.Properties;
-import org.openqa.selenium.Cookie;
 import java.time.Duration;
 
 public class Hooks {
@@ -28,13 +27,23 @@ public class Hooks {
             properties.load(file);
             
             // Setup ChromeDriver
-//            WebDriverManager.chromedriver().setup();
+            WebDriverManager.chromedriver().setup();
             
-            WebDriverManager.chromedriver().browserInDocker()
-                    .enableVnc().enableRecording();
             
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--remote-allow-origins=*");
+            
+            // Check if running in Docker
+            if (System.getenv("CHROME_OPTIONS") != null) {
+                // Docker-specific options
+                options.addArguments("--headless");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--window-size=1920,1080");
+            } else {
+                // Local-specific options
+                options.addArguments("--remote-allow-origins=*");
+                options.addArguments("start-maximized");
+            }
             
             driver = new ChromeDriver(options);
             driver.manage().window().maximize();

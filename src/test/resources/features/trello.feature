@@ -22,7 +22,7 @@ Scenario: Try to create a board with invalid API token
     Then I should get unauthorized error response
 
 @api @regression
-Scenario: Try to update non-existent board
+Scenario: Try to update non-existent board via API
     Given I have valid API credentials
     When I try to update board with invalid id "invalid123" to name "Updated Board"
     Then I should get not found error response

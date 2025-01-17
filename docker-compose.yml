@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  trello-automation:
+    build: .  # Directly points to the current directory where the Dockerfile is located
+    container_name: trello-automation  # Naming the container
+    command: mvn test  # Command to run Maven tests
+    volumes:  # Defining volumes to share files between host and container
+      - .:/app  # Mount the entire project folder into /app in the container
